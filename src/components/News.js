@@ -17,8 +17,14 @@ const News = (props) => {
     }
 
     const updateNews = async () => {
+        let url;
+        if (props.category === "everything") {
+            url = `https://newsapi.org/v2/everything?q=india&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`
+        }
+        else {
 
-        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
+            url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
+        }
 
         setLoading(true);
 
@@ -38,7 +44,7 @@ const News = (props) => {
     }
 
     useEffect(() => {
-        document.title = `${capitalizeFirstLetter(props.category)} - NewsMonkey`;
+        document.title = `${props.category === `everything` ? `NewsAddict - Get daily dose news for free!` : capitalizeFirstLetter(props.category)} - NewsMonkey`;
         updateNews();
         // eslint-disable-next-line
     }, [])
@@ -46,7 +52,14 @@ const News = (props) => {
 
     const fetchMoreData = async () => {
 
-        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
+        let url;
+        if (props.category === "everything") {
+            url = `https://newsapi.org/v2/everything?q=india&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`
+        }
+        else {
+
+            url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
+        }
 
         let data = await fetch(url);
 
@@ -60,7 +73,7 @@ const News = (props) => {
 
     return (
         <>
-            <h1 className="text-center" style={{ margin: "35px 0px", marginTop: "90px" }}>NewsAddict - Top {capitalizeFirstLetter(props.category)} HeadLines</h1>
+            <h1 className="text-center" style={{ margin: "35px 0px", marginTop: "90px" }}>NewsAddict - Top {props.category === "everything" ? "" : capitalizeFirstLetter(props.category)} HeadLines</h1>
 
             {loading && <Spinner />}
 
